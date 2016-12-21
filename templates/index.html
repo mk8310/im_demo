@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{room}} IM</title>
+    <script type="text/javascript"
+            src="/static/json2.js"></script>
+    <script>
+        var ws = new WebSocket('ws://{{host}}/soc/{{room}}');
+        ws.onmessage = function (event) {
+            var div = document.getElementById('message_list');
+            var _span = document.createElement('div');
+            _span.innerText = event.data;
+            div.appendChild(_span);
+        };
+
+        function send() {
+            var content = document.getElementById('message').value;
+            var nickname = document.getElementById('nickname').value;
+            var message = JSON.stringify({'message': content, 'nickname': nickname, 'room': '{{room}}'});
+            ws.send(message);
+            document.getElementById('message').value = '';
+            document.getElementById('nickname').value = '';
+        }
+    </script>
+</head>
+<body>
+<div id="message_list" style="height: 500px;border: dashed 1px">
+
+</div>
+<div>
+    <textarea id="message"  rows="5" placeholder="请输入内容" style="width:100%">
+
+    </textarea><br/>
+    <input type="text" placeholder="请输入昵称" id="nickname">
+    <button id="btn_submit" value="提交" onclick="send()">提交</button>
+</div>
+</body>
+</html>
